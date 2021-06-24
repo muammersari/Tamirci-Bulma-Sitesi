@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewData["Title"] = "KayitOl";
+    Layout = "~/Views/Shared/_LayoutUstMenu.cshtml";
+}
+
+<div class="my-5 justify-content-center" style="height:auto;">
+    <div class="container-fluid" style="height:65%;">
+        <div class="row justify-content-center h-100">
+            <div id="kayitturusec" class="col-12 col-sm-10 col-md-8 col-lg-6" style="height:auto; max-height:100%;">
+                <form class="shadow p-3 mb-5 bg-white rounded">
+                    <div class="form-group ">
+                        <h3 style="text-align:center;"> <ins>NOT</ins></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>=> Eğer Tamirci iseniz bir iş yeriniz var ise<a class="text-success" style="font-size:large;"> ' Tamirci Olarak Kayıt Ol ' </a> Butonuna Tıklayınız.</label>
+                    </div>
+                    <div class="form-group">
+                        <label>=> Eğer hizmet almak istiyorsanız <a class="text-primary" style="font-size:large;"> ' Kullanıcı Olarak Kayıt Ol ' </a> butonuna tıklayınız</label>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="kullanicimodal" class="btn btn-primary" data-toggle="modal" data-target="#kullanicikayit">
+                            Kullanıcı Olarak Kayıt Ol
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="tamircimodal" class="btn btn-success" data-toggle="modal" data-target="#tamircikayit">
+                            Tamirci Olarak Kayıt Ol
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*kullaniclar için kayıt sayfası*@
+<div class="modal fade bg-info overflow-auto kaydirma_cubugu" id="kullanicikayit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body overflow-auto kaydirma_cubugu" style="height:50%;">
+                <h3 style="text-align:center;">Kayıt Ol</h3>
+                <p>Hesap oluşturmak için lütfen bu formu doldurun.</p>
+                <hr>
+                <input type="text" class="form-control ustbosluk" placeholder="İsim" id="isim" required>
+
+                <input type="text" class="form-control ustbosluk" placeholder="Soyisim" id="soyisim" required>
+
+                <input type="text" class="form-control ustbosluk" placeholder="xxxxx@example.com" id="email" required>
+
+                <select name="sehir" id="sehir" class="form-control ustbosluk">
+                    <option value="">Şehir Seçiniz</option>
+                </select>
+
+                <input type="password" class="form-control ustbosluk" placeholder="Şifre" id="sifre" required>
+
+                <input type="password" class="form-control ustbosluk" placeholder="Şifre Tekrar" id="sifretekrar" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" id="kullanici_kayit" class="btn btn-primary">Kayıt Ol</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*Tamirciler için girş sayfası*@
+<div class="modal fade bg-success overflow-auto kaydirma_cubugu" id="tamircikayit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 style="text-align:center;">Kayıt Ol</h3>
+                <p style="text-align:center;">Hesap oluşturmak için lütfen bu formu doldurun.</p>
+                <hr>
+                <input type="text" class="form-control ustbosluk" placeholder="İsim" id="t_isim" required>
+
+                <input type="text" class="form-control ustbosluk" placeholder="Soyisim" id="t_soyisim" required>
+
+                <input type="text" class="form-control ustbosluk" placeholder="xxxxx@example.com" id="t_email" required>
+
+                <input type="text" class="form-control ustbosluk" placeholder="İş Yeri Adı" id="t_isyeriadi" required>
+
+                <select name="t_sehir" id="t_sehir" class="form-control ustbosluk">
+                    <option value="">Şehir Seçiniz</option>
+                </select>
+
+                <input type="text" class="form-control ustbosluk" placeholder="Adres" id="t_adres" required>
+
+                <select name="t_kategori" id="t_kategori" class="form-control ustbosluk">
+                    <option value="">Kategori Seçiniz</option>
+                </select>
+
+                <textarea class="form-control ustbosluk" placeholder="Açıklama" id="t_aciklama" required></textarea>
+
+                <div class="ustbosluk">Mesai Başlama : <input type="time" name="usr_time" id="baslangicsaati">&emsp;Mesai Bitiş : <input type="time" name="usr_time" id="bitissaati"></div>
+                @*<input type="text" class="form-control" placeholder="Çalışma Saatleri (ÖRNEK : 08:00-19:00)" id="t_calismasaatleri" required>*@
+
+                <input type="password" class="form-control ustbosluk" placeholder="Şifre" id="t_sifre" required>
+
+                <input type="password" class="form-control ustbosluk" placeholder="Şifre Tekrar" id="t_sifretekrar" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" id="tamirci_kayit" class="btn btn-primary">Kayıt Ol</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/JavaScript.js"></script>
+<script src="~/kullanici.js"></script>
+<script src="~/tamirci.js"></script>
+<script src="~/sehir_kategori.js"></script>
+<script type="text/javascript">
+    var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+    if (userAuthorized == true) {
+        localStorage.setItem("login", "true");
+    } else {
+        localStorage.setItem("login", "false");
+    }
+
+    $(document).ready(function () {
+
+        for (var i = 0; i < sehirler.length; i++) {
+            $("#t_sehir").append('<option value="' + sehirler[i] + '">' + sehirler[i] + '</option>');
+            $("#sehir").append('<option value="' + sehirler[i] + '">' + sehirler[i] + '</option>');
+        }
+        for (var i = 0; i < kategori.length; i++) {
+            $("#t_kategori").append('<option value="' + kategori[i] + '">' + kategori[i] + '</option>');
+        }
+        if (localStorage.getItem("login") == "true") {
+            document.getElementById("nav_giris_yap").style.display = "none";
+            document.getElementById("nav_kayit_ol").style.display = "none";
+            document.getElementById("nav_mesaj").style.display = "block";
+            document.getElementById("nav_cikis_yap").style.display = "block";
+            document.getElementById("nav_hesabim").style.display = "block";
+        } else {
+            document.getElementById("nav_giris_yap").style.display = "block";
+            document.getElementById("nav_kayit_ol").style.display = "block";
+            document.getElementById("nav_cikis_yap").style.display = "none";
+            document.getElementById("nav_hesabim").style.display = "none";
+            document.getElementById("nav_mesaj").style.display = "none";
+        }
+
+        $("#tamirci_kayit").click(function () {
+            const tamirciList = {
+                isim: document.getElementById('t_isim').value,
+                soyisim: document.getElementById('t_soyisim').value,
+                email: document.getElementById('t_email').value,
+                isyeriadi: document.getElementById('t_isyeriadi').value,
+                sehir: document.getElementById('t_sehir').value,
+                adres: document.getElementById('t_adres').value,
+                aciklama: document.getElementById('t_aciklama').value,
+                kategori: document.getElementById('t_kategori').value,
+                sifre: document.getElementById('t_sifre').value,
+                calismasaatleri: document.getElementById('baslangicsaati').value + " - " + document.getElementById('bitissaati').value,
+                olusturulmatarihi: Date.now,
+                durum: false,
+                resimler: "",
+                role: "tamirci"
+            }
+            if (tamirciList.isim != "" && tamirciList.soyisim != "" && tamirciList.email != "" && tamirciList.adres != ""
+                && tamirciList.sehir != "" && tamirciList.kategori != "" && tamirciList.aciklama != "" && tamirciList.calismasaatleri != "" && tamirciList.isyeriadi != "") {
+                if (tamirciList.sifre == document.getElementById('t_sifretekrar').value) {
+                    TamirciEkle(tamirciList);
+                } else {
+                    bootbox.alert({
+                        message: "Lütfen Şifrenizi Tekrar Ederken Doğru Giriniz !"
+                    });
+                }
+            } else {
+                bootbox.alert({
+                    message: "Lütfen Bilgilerinizi Tam ve Eksiksiz Doldurunuz !"
+                });
+
+            }
+        });
+
+        $("#kullanici_kayit").click(function () {
+
+            const kullaniciList = {
+                isim: document.getElementById('isim').value,
+                soyisim: document.getElementById('soyisim').value,
+                email: document.getElementById('email').value,
+                sehir: document.getElementById('sehir').value,
+                sifre: document.getElementById('sifre').value,
+                olusturulmatarihi: Date.now,
+                durum: false,
+                role: "kullanici"
+            }
+            if (kullaniciList.isim != "" && kullaniciList.soyisim != "" && kullaniciList.email != "" && kullaniciList.sehir != "") {
+                if (kullaniciList.sifre == document.getElementById('sifretekrar').value) {
+                    KullaniciEkle(kullaniciList);
+                }
+                else {
+                    bootbox.alert({
+                        message: "Lütfen Şifrenizi Tekrar Ederken Doğru Giriniz !"
+                    });
+                }
+            }
+            else {
+                bootbox.alert({
+                    message: "Lütfen Bilgilerinizi Tam ve Eksiksiz Doldurunuz !"
+                });
+            }
+        });
+    });
+</script>
+

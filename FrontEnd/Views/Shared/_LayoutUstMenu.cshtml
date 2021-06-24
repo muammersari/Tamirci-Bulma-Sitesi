@@ -1,0 +1,161 @@
+﻿@{
+    Layout = null;
+}
+<link href="~/Style.css" rel="stylesheet" />
+<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script src="~/jquery/jquery.js"></script>
+<script src="~/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="~/lib/bootbox.js/bootbox.js"></script>
+<link href="~/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+<!--Header-->
+<div>
+    <div style="background-color:whitesmoke;">
+        <nav class="navbar bg-transparent border-bottom">
+            <div class="ml-3">
+                <a href="/Tamirci/Tamirciler" style="font-size: 1.5rem; color: #585858; text-shadow: -1px 0 green, 0 1px green, 1px 0 green, 0 -1px green;">tamircibul.com</a>
+            </div>
+            <div class="navbar-nav">
+                <ul class="nav">
+                    <li class="nav-item ml-auto mr-2" id="nav_giris_yap" style="display:none;">
+                        <button type="button" id="modal_btn_giris_yap" class="btn shadow-none" data-toggle="modal" data-target="#girisyapmodal" style="color:darkgreen; font-weight:600;">
+                            Giriş Yap
+                        </button>
+                    </li>
+                    <li class="nav-item active ml-auto mr-2" id="nav_kayit_ol" style="display:none;">
+                        <a type="button" id="btn_kayit_ol" href="/Kayit/KayitOl" class="btn shadow-none" @*data-toggle="modal" data-target="#exampleModalCenter"*@ style="color:#0e1072; font-weight:600;">
+                            Kayıt Ol
+                        </a>
+                    </li>
+                    <li class="nav-item ml-auto mr-1" id="nav_mesaj" style="display:none;">
+                        <button type="button" id="btn_sohbet_mesaj" class="btn bi-envelope" style="color:darkgreen; font-size: 1.7rem;"></button>
+                    </li>
+                    <li class="nav-item ml-auto mr-1" id="nav_hesabim" style="display:none;">
+
+                        <button type="button" id="modal_btn_hesabim" class="btn bi-person-bounding-box" style="color:darkgreen; font-size: 1.7rem;"></button>
+                    </li>
+                    <li class="nav-item ml-auto mr-1" id="nav_cikis_yap" style="display:none;">
+                        <button type="button" id="cikisyap" class="btn bi-box-arrow-right" style="color:red; font-size:1.7rem;"></button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!--Body-->
+    <div style="text-align:center; min-height:90%;">
+        @RenderBody()
+    </div>
+    <!--Footer-->
+    <div style="width:100%; height:auto; background-color:#0f280c; margin-bottom:20px; padding:20px; text-align:center; color:white; ">
+        <div class="container-fluid justify-content-center" style=" margin:0px 0px 15px 0px;">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-12 col-md-8 col-lg-6 justify-content-center">
+                    <ul style="list-style-type:none;">
+                        <li><h3>İletişim</h3></li>
+                        <li><input type="text" class="form-control ustbosluk" id="txt_mailadres" placeholder="Mail Adresi Giriniz" /></li>
+                        <li><textarea class="form-control ustbosluk overflow-auto kaydirma_cubugu" id="txt_mail_icerik" placeholder="Mesajınızı yazınız..."></textarea></li>
+                        <li><input type="button" class="btn btn-outline-info ustbosluk" value="Mesaj Gönder" /></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-sm-11 col-md-8 d-block d-lg-none"><hr style="background-color:white;" /></div>
+                <div class="col-12 col-sm-12 col-md-8 col-lg-6 my-0 my-lg-0" style="text-align:left;">
+                    <h4 style="text-align:center;">tamircibul.com nedir?</h4>
+                    <ul style="list-style-type:none;">
+                        <li>> İhtiyacın Olan Tamircileri Puanlarına ve Yorumlarına Göre Analiz Edebilirsin</li>
+                        <li>> Tamircilerin Profilini İnceleyip En İyi Kararı Vermen Artık Daha Kolay</li>
+                        <li>> Daha Sonra Bakmak İçin Tamircileri Kaydedebilirsin</li>
+                        <li>> Tamircilere Mesaj Atıp ve İletişim Kurmaya Başla</li>
+                        <li>> Tamircin ile Anlaşıp, Sözleşme Oluşturup ve İşlemlere Başlayabilirsiniz</li>
+                        <li>> İşlemler Bittikten Sonra Hizmet Aldığın Tamirciye Puan Verebilir Veya Yorum Yapabilirsin. Bu Senden Sonrakilere Karar Vermeleri İçin Faydalı Olabilir.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Giriş Yapılan Modal*@
+<div class="modal fade bg-success" id="girisyapmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="giris_yap_modal_kapat" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body overflow-auto kaydirma_cubugu" style="height:50%;">
+                <h3 style="text-align:center;">Giriş Yap</h3>
+                @*<p>Hesap oluşturmak için lütfen bu formu doldurun.</p>*@
+                <hr>
+                <input type="text" class="form-control ustbosluk" placeholder="E-mail" id="email_giris" required autofocus>
+                <input type="password" class="form-control ustbosluk" placeholder="Şifre" id="sifre_giris" required>
+
+                <label for="uyari" id="uyari" style="color:red;display:none;"> Lütfen Alanları Doldurunuz ...</label>
+                <hr />
+                <button type="button" id="kullanici_giris" class="btn btn-success form-control">Giriş Yap</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/JavaScript.js"></script>
+<script src="~/kullanici.js"></script>
+<script src="~/tamirci.js"></script>
+<script type="text/javascript">
+
+    var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+    if (userAuthorized == true) {
+        localStorage.setItem("login", "true");
+    } else {
+        localStorage.setItem("login", "false");
+    }
+
+    $(document).ready(function () {
+        if (localStorage.getItem("login") == "true") {
+            document.getElementById("nav_giris_yap").style.display = "none";
+            document.getElementById("nav_kayit_ol").style.display = "none";
+            document.getElementById("nav_mesaj").style.display = "block";
+            document.getElementById("nav_cikis_yap").style.display = "block";
+            document.getElementById("nav_hesabim").style.display = "block";
+        } else {
+            document.getElementById("nav_giris_yap").style.display = "block";
+            document.getElementById("nav_kayit_ol").style.display = "block";
+            document.getElementById("nav_cikis_yap").style.display = "none";
+            document.getElementById("nav_hesabim").style.display = "none";
+            document.getElementById("nav_mesaj").style.display = "none";
+        }
+
+        $("#modal_btn_hesabim").click(function () {
+            if (localStorage.getItem("kullaniciTipi").toString() == "kullanici") {
+                window.location = "/Kullanici/Kullanici_Hesap_Profili";
+            } else {
+                window.location = "/Tamirci/Tamirci_Hesap_Profili";
+            }
+        });
+
+        //header kısmındaki mesajlaşma butonuna tıklandığında chat sayfasına yönlendirilir.
+        $("#btn_sohbet_mesaj").click(function () {
+            window.location = "/Mesajlar/Chat";
+        });
+
+        //giriş yapıldığında  giriş yap fonksiyonuna yönlendirilir. ve Giriş işlemleri yapılır
+        $("#kullanici_giris").click(function () {
+            const kullanicibilgileri = {
+                email: document.getElementById('email_giris').value,
+                sifre: document.getElementById('sifre_giris').value,
+            }
+            if (kullanicibilgileri.email != "" && kullanicibilgileri.sifre != "") {
+                girisyap(kullanicibilgileri);
+            } else {
+                document.getElementById("uyari").style.display = "block";
+            }
+        });
+
+        //çıkış yap butonuna basıldığı da Anasayfa.cs debuluna çıkış yap metoduna yönlendirilir ve çıkkış yapılır.
+        $("#cikisyap").click(function () {
+            cikisyap();
+        });
+    });
+</script>
+

@@ -1,0 +1,253 @@
+﻿@model IList<Tamirci_Bul.Models.Mesajlar>
+@{
+    ViewData["Title"] = "Chat";
+    Layout = "~/Views/Shared/_LayoutUstMenu.cshtml";
+    string kul_id = "";
+}
+<script src="~/lib/signalr/signalr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+<link href="~/Style.css" rel="stylesheet" />
+<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script src="~/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="~/jquery/jquery.js"></script>
+<div class="alert alert-warning" id="durummesajlari" style="display:none; position:absolute; width:50%; left:25%; top:1%;"></div>
+<div class="container-fluid" style="height:auto;">
+    <div class="row justify-content-center h-100">
+        <div id="div_mesaj_alani" class="col-12 col-sm-10 col-md-8 col-lg-6" style="height:auto; max-height:100%;">
+            <div id="bosmesaj" style="display:none; width:100%; margin-top:20%; font-size:20px; color:darkred;">Mesajınız Bulunmuyor</div>
+
+            @if (Model.Count() == 0)
+            {
+                <div id="bosmesaj1" style="width:100%; margin-top:20%; font-size:20px; color:darkred;">Mesajınız Bulunmuyor</div>
+            }
+            else
+            {
+                <ul class="list-group h-auto overflow-auto kaydirma_cubugu" id="ul_mesaj" style="max-height:100%; padding:5px;">
+                    @foreach (var item in Model)
+                    {
+                        if (ViewBag.role == "kullanici")
+                        {
+                            kul_id = item.tamirciid.ToString();
+                            <li class="mb-2 border-bottom" id="li+@item.tamirciid">
+                                <div class="d-flex ">
+                                    <div class="p-2 flex-grow-1 bd-highlight" id="@item.tamirciid" onclick="btnicerikgetir(this.id)" style="text-align:left;">
+                                        <h6>@item.karsi_taraf_isim</h6>
+                                        <p>
+                                            @if (item.kullanici_goruntulenmeyen_mesaj_sayisi.ToString() != "0")
+                                            {
+                                                <span class="badge badge-pill badge-primary" id="mesajsayisi+@item.tamirciid">@item.kullanici_goruntulenmeyen_mesaj_sayisi</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-primary" id="mesajsayisi+@item.tamirciid"></span>
+                                            }
+                                            <span id="durum+@item.tamirciid" style="color:red;"> çevrimdışı</span>
+                                        </p>
+                                    </div>
+                                    <div class="p-2 bd-highlight" id="@item.tamirciid" onclick="btnicerikgetir(this.id)"><span class="btn btn-success" style="font-size:small;">Sohbeti Aç</span></div>
+                                    <div class="p-2 bd-highlight" id="@item.tamirciid" onclick="mesajsil(this.id)"><span class="btn btn-danger" style="font-size: small;">Sil</span></div>
+                                </div>
+                                @*<small class="float-left">10.02.2021 14:45</small>*@
+                            </li>
+                        }
+                        else
+                        {
+                            kul_id = item.tamirciid.ToString();
+                            <li class="mb-2 border-bottom" id="li+@item.kullaniciid">
+                                <div class="d-flex bd-highlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight" id="@item.kullaniciid" onclick="btnicerikgetir(this.id)" style="text-align:left;">
+                                        <h6>@item.karsi_taraf_isim</h6>
+                                        <p>
+                                            @if (item.tamirci_goruntulenmeyen_mesaj_sayisi.ToString() != "0")
+                                            {
+                                                <span class="badge badge-pill badge-primary" id="mesajsayisi+@item.kullaniciid">@item.tamirci_goruntulenmeyen_mesaj_sayisi</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-primary" id="mesajsayisi+@item.kullaniciid"></span>
+                                            }
+                                            <span id="durum+@item.kullaniciid" style="color:red;">çevrimdışı</span>
+                                        </p>
+                                    </div>
+                                    <div class="p-2 bd-highlight" id="@item.kullaniciid" onclick="btnicerikgetir(this.id)"><span class="btn btn-success" style="font-size:small;">Sohbeti Aç</span></div>
+                                    <div class="p-2 bd-highlight" id="@item.kullaniciid" onclick="mesajsil(this.id)"><span class="btn btn-danger" style="font-size: small;">Sil</span></div>
+                                </div>
+                                @*<small class="float-left">10.02.2021 14:45</small>*@
+                            </li>
+                        }
+                    }
+                </ul>
+            }
+
+        </div>
+        <div id="div_mesaj_icerigi" class="col-12 col-sm-10 col-md-8 col-lg-6 w-100 mt-3" style="height:auto; display:none;">
+            <div class="table-bordered border-success rounded shadow-sm shadow">
+                <div style="width:100%; height:auto;" class="mb-1 border-bottom bg-success d-flex justify-content-end">
+                    <div class="p-2 bd-highlight btn bi-x shadow-none" id="mesajkapat" name="@kul_id" style="font-size:200%; color:darkred;"></div>
+                    @*<div class="p-2 bd-highlight" id="div_karsi_isim"></div>*@
+                    @*<a id="karsi_isim" style="font-size:large; color:darkgray;">asd</a>
+                        <a id="mesajkapat" name="@kul_id" class="btn bi-x shadow-none" style="font-size:200%; color:darkgray;"></a>*@
+                </div>
+                <ul class="list-group kaydirma_cubugu" id="ul_mesaj_içerik" style="overflow-y:scroll; height:70%; width:100%;"></ul>
+                <div class="w-100 bg-success mt-1" style="height:auto;">
+                    <table class="w-100">
+                        <tr class="w-100">
+                            <td class="w-100 border-0 p-1">
+                                <input type="text" class="form-control rounded" id="mesaj_icerik" placeholder="Mesaj Yaz" aria-label="default" />
+                            </td>
+                            <td class="w-auto border-0 p-1"><button class="btn bi-cursor-fill w-auto shadow-none" id="btn_msj_gonder" style="color:khaki; font-size:1.8rem;"></button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    @*<div id="eee"></div>*@
+</div>
+<script src="~/mesajlar.js"></script>
+<script>
+    // localStorage.setItem("konusuyormu", "hayir"); // sayfa
+    localStorage.setItem("chat_acikmi", "evet"); // sayfa açıldığında evet yapıyoruz
+    localStorage.setItem("konusuyormu", "hayir"); // kullanıcı mesajlaşıyor ise evet yapıyoruz
+    localStorage.setItem("mesajgeldimi", "hayir"); // burası kayıtlı olmayan yeni mesaj geldiğinde sayfayı yenilemek için  evet yapılacak
+
+
+    const connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();     //burada signalR ın connection bağlantsını oluşturuyoruz ve start başlatıyoruz.
+    connection.start();
+
+    const _nickname = localStorage.getItem("_id"); //siteye giriş yapan kişinin id sini alıyoruz
+
+    function btnicerikgetir(karsi_taraf_id) {
+        localStorage.setItem("konusuyormu", "evet"); // kullanıcı mesajlaşıyor ise evet yapıyoruz
+        connection.invoke("GetNickName", _nickname, karsi_taraf_id).catch(error => console.log(error)); //burada kullanıcıyı mesajı açtığı zaman kendi nickname ini ve karşı tarafın nickname ini sisteme ekliyoruz
+        mesajicerigigetir(karsi_taraf_id); //kullanıcı sayfayı ilk açtığın da tüm mesajlarını getiriyoruz
+        document.getElementById("mesajsayisi+" + karsi_taraf_id + "").innerHTML = "";
+    }
+
+    connection.on("clientJoined", (nickName, alici_nickname) => { // burada kullanıcı mesajı açtığı zaman kimin mesajını açtıysa o kişiye çevrimiçi olarak görünüyor
+        if (_nickname.toString() == alici_nickname.toString()) { // sadece tıklanan alıcıda çevrimiçi gösteriyoruz
+            document.getElementById("durum+" + nickName + "").innerHTML = "çevrimiçi";
+            document.getElementById("durum+" + nickName + "").style.color = "green";
+        }
+    })
+
+    connection.on("receiveMessage", (message, alici_nickname, gonderen_nickName, cevrimicimi) => {//burada mesaj gönderildiği zaman çevrimiçi ise mesajı alan kişiye mesajı anında sayfasında gösteriyoruz
+        if (cevrimicimi.toString() == "cevrimici") { // kişi çevrim içi ise mesaj gönderiliyor
+            var limesaj = document.createElement('li');
+            limesaj.className = "list-group-item rounded m-2 mr-auto list-group-item-success"; // mesajı karşı taraf göreceği için sol tarafta gösteriyoruz
+            limesaj.style.borderRadius = "10px";
+            limesaj.style.boxShadow = "0 0 0.5px 0.5px lightgreen";
+            limesaj.style.color = "black";
+            limesaj.style.width = "auto";
+            limesaj.style.maxWidth = "75%";
+            limesaj.style.textAlign = "left";
+            limesaj.innerHTML = message;
+            var zaman = document.createElement("small");
+            zaman.innerHTML = new Date().toLocaleTimeString().substring(0,5);
+            zaman.className = "d-flex justify-content-start pt-1";
+            limesaj.append(zaman);
+
+            document.getElementById("ul_mesaj_içerik").append(limesaj); // mesajı sayfada göstermek için ekliyoruz
+            $("#ul_mesaj_içerik").scrollTop(document.getElementById("ul_mesaj_içerik").scrollHeight); // son mesajların görünmesi için scroll u en aşağı çekiyoruz.
+            document.getElementById("mesajsayisi+" + gonderen_nickName.toString() + "").innerHTML = ""; // burada alıcı çevrimiçi ise görüntülenmeyen mesajları 0 yapıyoruz.
+        }
+        else { // kişi çevrimiçi değilse görüntülenmeyen mesaj sayısını arttırıyoruz
+            if (_nickname.toString() == alici_nickname.toString()) {
+                if (document.getElementById("mesajsayisi+" + gonderen_nickName.toString() + "") != null) { // kullanıcı mesajları silmiş mi silmemiş mi kontrol ediyoruz.
+                    if (document.getElementById("mesajsayisi+" + gonderen_nickName.toString() + "").innerHTML == "") {// görüntülenmeyen mesaj yoksa
+                        document.getElementById("mesajsayisi+" + gonderen_nickName.toString() + "").innerHTML = "1"; // alıcının görüntlenmeyen mesajı hiç yoksa 1 yapıyoruz
+                    } else {// alıcı çevrimdışı ise görüntülenmeyen mesaj sayısını 1 arttırıyoruz
+                        document.getElementById("mesajsayisi+" + gonderen_nickName.toString() + "").innerHTML = parseInt(document.getElementById("mesajsayisi+" + gonderen_nickName.toString() + "").innerHTML) + 1;
+                    }
+                } else {// mesajlar silinmiş ise
+                    if (localStorage.getItem("chat_acikmi").toString() == "evet") { // mesajı alan kişi mesaj atan kişinin mesajlarını sildi ise, herhangi bir konuşma yapmıyor ise ve sildiği kişiden mesaj geldi ise sayfayı yeniletip gele mesajı sayfada gösteriyoruz
+                        if (localStorage.getItem("konusuyormu").toString() == "hayir") {// konuşma yapmıyor ise
+                            $("#durummesajlari").html("1 Yeni Mesajınız Var.");
+                            $("#durummesajlari").fadeIn(2000, () => { // kullanıcıya yeni mesaj geldi mesajı veriliyor ve sayfa yenileniyor
+                                setTimeout(() => {
+                                    $("#durummesajlari").fadeOut(1500);
+                                }, 2000)
+                                window.location.reload(true);
+                            });
+                        } else {
+                            localStorage.setItem("mesajgeldimi", "evet");
+                            alert("Yeni mesajınız Var. Mesajı kapattığınız da Sayfanız Yenilecenektir");// konuşma yapıyor ise yeni mesaj geldiğini ve sayfasını yenilemesini istiyoruz
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+    connection.on("db_message_create", (message, alici_nickname, cevrimicimi) => {
+        document.getElementById("mesajsayisi+" + alici_nickname.toString() + "").innerHTML = ""; // mesaj gönderen mesajı gördüğü için görüntülenmeyen mesaj sayısını sıfırlıyoruz
+        if (cevrimicimi.toString() == "cevrimici") { // alıcı çevrimiçi ise görüntülenmeyen mesaj sayısını değiştirmiyoruz
+            mesajgonder(localStorage.getItem("kullaniciTipi"), alici_nickname, message, "true", "evet"); //mesajı veritabanına eklemek için mesajgönder fonksiyonuna yoluyoruz
+            document.getElementById("mesaj_icerik").value = "";
+        } else { //alıcı çevrimdışı ise çevrimdışı olarak bilgi gönderip görüntülenmeyen mesaj sayısını 1 arttırıyoruz
+            mesajgonder(localStorage.getItem("kullaniciTipi"), alici_nickname, message, "true", "hayir"); //mesajı veritabanına eklemek için mesajgönder fonksiyonuna yoluyoruz
+            document.getElementById("mesaj_icerik").value = "";
+        }
+    })
+
+    connection.on("disconned", (cikisyapan_nickname, cikisyapılan_nickname) => { //çıkış yapan ve çıkış yapılan kişinin bilgileri alınıyor
+        if (_nickname.toString() == cikisyapılan_nickname.toString()) { //çıkış yapılan kişi Login ise işlemler yapılıyor
+            document.getElementById("durum+" + cikisyapan_nickname + "").innerHTML = "çevrimdışı"; // burada kullanıcı çıkış yaptığında çıkış yapılan kullanıcıda çevrimdışı olarak gösteriliyor
+            document.getElementById("durum+" + cikisyapan_nickname + "").style.color = "red";
+        }
+    })
+
+    connection.on("closed", cikisturu => {// kullanıcının çıkış turune göre bilgileri güncelleniyor
+        if (cikisturu.toString() == "komple_cikis") {
+            localStorage.setItem("chat_acikmi", "hayir"); // kullanıcı komple çıkış yaptı ve hayır yaptık
+            localStorage.setItem("konusuyormu", "hayir"); // kullanıcı komple çıkış yaptı ve hayır yaptık
+
+        } else { //sadece mesajı kapattığında işlemler
+            localStorage.setItem("chat_acikmi", "evet"); // sayfa açıldığında evet yapıyoruz
+            localStorage.setItem("konusuyormu", "hayir"); // kullanıcı mesajı kapatttığında hayır yapıyoruz
+            if (localStorage.getItem("mesajgeldimi") == "evet") { // burada kullanıcıya mesaj kutusunda olmayan birinden mesaj geldiği zaman konuşmaya devam ediyorsa konuşmayı kapattığında sayfayı yeniletip mesajı gösteriyoruz
+                localStorage.setItem("mesajgeldimi", "hayir");
+                window.location.reload(true);
+            }
+            // $("#durummesajlari").html("Sayfa Yükleniyor");
+            //$("#durummesajlari").fadeIn(1000, () => { // burada sayfa mesaj gösterilip 2 saniye sonra mesaj yenileniyor
+            //    setTimeout(() => {
+            //        $("#durummesajlari").fadeOut(1000);
+            //    }, 1000)
+            //    //window.location.reload(true);
+            //});
+        }
+    })
+
+    $("#mesajkapat").click(function () {
+        document.getElementById("div_mesaj_icerigi").style.display = "none";
+        document.getElementById("div_mesaj_alani").style.display = "block";
+        connection.invoke("Disconned", _nickname, document.getElementById("btn_msj_gonder").name); // burada kullanıcı mesajı kapattığında nickname ini ve kimin mesajını kapattığının bilgilerini gönderiyoruz ve çıkış yaptırıyoruz.
+    });
+
+    $("#btn_msj_gonder").click(function () {
+        //aşağıdaki olayda mesajı gönderdiğimiz kişinin görmesi için invoke ile sendmessage metoduna mesajı ve mesajı gonderdiğimiz kişinin nickname ini gönderiyoruz
+        if (document.getElementById("mesaj_icerik").value != "") {
+            connection.invoke("SendMessageAsync", document.getElementById("mesaj_icerik").value, document.getElementById("btn_msj_gonder").name, _nickname.toString());
+            var limesaj = document.createElement('li'); // buradamesajı göstermek için bir li oluşturuyoruz
+            limesaj.className = "list-group-item rounded m-2 ml-auto list-group-item-light"; //mesaj gönderen olduğu için sağ tarafa doğru yaslıyoruz.
+            limesaj.style.borderRadius = "10px";
+            limesaj.style.boxShadow = "0 0 0.5px 0.5px lightgreen";
+            limesaj.style.color = "black";
+            limesaj.style.width = "auto";
+            limesaj.style.maxWidth = "75%";
+            limesaj.style.textAlign = "left";
+            limesaj.innerHTML = document.getElementById("mesaj_icerik").value;
+            var zaman = document.createElement("small");
+            zaman.innerHTML = new Date().toLocaleTimeString().substring(0, 5);
+            zaman.className = "d-flex justify-content-end pt-1";
+            limesaj.append(zaman);
+            document.getElementById("ul_mesaj_içerik").append(limesaj); //mesajı sayfada gösteriyoruz
+            $("#ul_mesaj_içerik").scrollTop(document.getElementById("ul_mesaj_içerik").scrollHeight); // burada scroll u en aşağı  çekiyoruz ki son mesajlardirek görünsün
+
+        } else {
+            alert("Lütfen Mesajı Boş Bırakmayınız...");
+        }
+    });
+</script>

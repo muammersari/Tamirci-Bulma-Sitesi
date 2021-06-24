@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Tamirci_Bul.Models.Tamircimodel>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Tamirci_Profili";
+    Layout = "~/Views/Shared/_LayoutUstMenu.cshtml";
+}
+
+<link href="~/Style.css" rel="stylesheet" />
+<script src="~/twitter-bootstrap/js/bootstrap.js"></script>
+<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script src="~/jquery/jquery.js"></script>
+<link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+<div>
+    <h4 id="tamirci_isyeri_adi" style="margin:15px 0px 0px 0px">@Model.ToList()[0].isyeriadi</h4>
+    <hr />
+    <div class="container-fluid justify-content-center" style="height:auto; width:100%; margin:0px 0px 15px 0px;">
+        <div class="row justify-content-center">
+            <div class="col-11 col-sm-11 col-md-10 col-lg-7">
+                <div class="card w-100 border-0 bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title" id="tamirci_ismi">@Model.ToList()[0].isim @Model.ToList()[0].soyisim</h5>
+                        <hr style="border-width:3px;" />
+                        <br />
+                        <p class="card-text" id="tamirci_aciklama">
+                            @Model.ToList()[0].aciklama dfgh fdg hfgh
+                            df ghdfghdfgş hdh dşflkg hislşhkiş şldg ilşsd fgişsld ilşd g k  işsl gş dfşdfg şdg işdf işldf gşişfkg df idfg
+                            df gisdşflgk işdfg df kgişld fil dfig işg işdfgi şdfgk dfg işdfg işdfk gişkfgiş dfig işlfg kiş işdf g
+                            dfg d fgidfşlgk idşfgişdlfg işf df gidf giş fgidfg  hfghcöçvbmn. d
+                            szd isdlşfgkisd gişdfgk  gdfgsidgkişdg işldfg ş ş  işsdfgksdşlfgk isdfşlgk sidşfgl işdfg işgkdfgşdlfg lfdgd fgfdşg df  dfşglk d
+                            dfg dfşglkdfş şdfg kşdfg şl dfgşldfgş kdşl fgkş g
+                            df gşdfgk şdfgl kdşflg şdflg şldfg
+                            dfgşdfgk şfg şdflgk
+                        </p>
+
+                        <p class="card-text text-danger" id="tamirci_kategori">
+                            @foreach (var item in Model.ToList()[0].kategori)
+                            {
+                                <a>&nbsp;#@item</a>
+                            }
+
+                        </p>
+
+                        <p class="card-text" id="tamirci_calisma_saatleri">@Model.ToList()[0].calismasaatleri</p>
+                        <p class="card-text" id="tamirci_adres">@Model.ToList()[0].adres</p>
+                        <br />
+                        <div class="align-items-center">
+                            <a href="#" class="btn btn-outline-info iletisim shadow-none mb-2" id="btn_iletisimkur" data-toggle="modal" data-target="#exampleModal" style="display:none;">İletişim Kur</a>
+                            <button class="btn btn-outline-success shadow-none m-auto w-50" name="@Model.ToList()[0]._id" id="tamircikaydet" style="display:none;">&nbsp; &nbsp; Kaydet&nbsp; &nbsp;  </button>
+                            <div class=" mt-2 text-success">
+                                <span style="display:block;">Resimler</span>
+                                <span class="btn bi-chevron-double-down text-success" style="font-size:1.5rem; display:block;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-11 col-sm-11 col-md-10 col-lg-9 border-top bordered justify-content-center pt-3" style="height:auto; margin:auto; padding:0.5% 0 0.5% 0;">
+                @foreach (var item in Model)
+                {
+                    <div class="kucukresim" style="height:auto; width:auto; max-width:15%; display:inline-block;">
+                        <img src="data:image/png;base64,@item.resimler" class="kucukresim" id="@item.resimler" onclick="buyukresimgoster_profil(this.id)" style="object-fit:cover; height:auto; max-height:100px; width:auto; max-width:90%;" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4" style="height:auto;">
+            <div class="col-8 col-sm-8 col-md-6 col-lg-4" id="div_buyukresim" style="height:auto; margin:auto;">
+                <div style="height:500px; width:auto; max-width:100%;">
+                    <img src="data:image/png;base64,@Model.ToList()[0].resimler" style="object-fit:contain; width:auto; max-width:70%; height:auto; max-height:450px; box-shadow:0px 0px 7px 1px gray;" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Yeni Mesaj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <h6 for="message-text" class="col-form-label">Mesaj</h6>
+                            <textarea class="form-control overflow-auto kaydirma_cubugu" id="txt_mesaj" placeholder="Mesajınızı Yazınız..." style="height:100px; resize:none;" rows="5"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" id="modal_mesaj_kapat" data-dismiss="modal">Kapat</button>
+                    <button type="button" id="btn_mesajgonder" name="@Model.ToList()[0]._id" class="btn btn-primary">Mesaj Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/mesajlar.js"></script>
+<script src="~/kullanici.js"></script>
+<script>
+    $(document).ready(function () {
+        if (localStorage.getItem("kullaniciTipi") == "kullanici") {
+            document.getElementById("tamircikaydet").style.display = "block";
+            document.getElementById("btn_iletisimkur").style.display = "block";
+        }
+        $("#tamircikaydet").click(function () {
+            tamircikaydet(this.name)
+        });
+        $("#btn_mesajgonder").click(function () {
+            mesajgonder(localStorage.getItem("kullaniciTipi"), document.getElementById("btn_mesajgonder").name, document.getElementById("txt_mesaj").value, "false", "hayir");
+        });
+
+    });
+    function buyukresimgoster_profil(base64) {
+        document.getElementById("div_buyukresim").innerHTML = "";
+
+        const div_resimcerceve1 = document.createElement('div');
+        //  div_resimcerceve1.style.height = "auto";
+        div_resimcerceve1.style.height = "500px";
+        div_resimcerceve1.style.maxWidth = "100%";
+        div_resimcerceve1.style.width = "auto";
+
+        const img1 = document.createElement('img');
+        img1.src = "data:image/png;base64," + base64;//base64 ile veritabınında gelen resim datasını atadık.
+        img1.setAttribute("style", "object-fit:contain;");//resmi boyutunu resmi bozmadan orantılı olarak ayarlıyor
+        img1.style.height = "auto";
+        img1.style.maxHeight = "450px";
+        img1.style.width = "auto";
+        img1.style.maxWidth = "70%";
+        img1.style.boxShadow = "0px 0px 7px 1px gray";
+
+        div_resimcerceve1.append(img1);
+        document.getElementById("div_buyukresim").append(div_resimcerceve1);
+    }
+</script>

@@ -1,0 +1,240 @@
+﻿@model IList<Tamirci_Bul.Models.Tamircimodel>
+@{
+    ViewData["Title"] = "Tamirciler";
+    Layout = "~/Views/Shared/_LayoutUstMenu.cshtml";
+}
+
+<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+<link href="~/Style.css" rel="stylesheet" />
+<script src="~/jquery/jquery.js"></script>
+<style>
+    /* #sayfalama {
+        padding: 0 20px 20px 20px;
+    }
+
+        #sayfalama a {
+            color: #fff;
+            background: #333;
+            padding: 3px 7px;
+            margin-right: 6px;
+            text-decoration: none;
+        }*/
+
+    #sayfalama li a.aktif {
+        background: lightgreen;
+        color: darkblue;
+    }
+</style>
+<script>
+    $(function () {
+        //-----------------------------------SAYFA SAYILARI YAZILAN ALAN--------------------------------------------------------
+
+        var toplamveri = $("#tamirci_liste li").length; // toplam kaç veri var
+        var gosterilecekverisayisi = 11; //1 sayfada gösterilecek veri sayısı
+        var sayfasayisi = Math.ceil(toplamveri / gosterilecekverisayisi); //toplam kaç adet sayfamız olacak buluyoruz
+        var sayfasayisiortasi = Math.ceil(sayfasayisi / 2); // sayfa sayısını ortasını buluyoruz
+
+        $("#tamirci_liste li:gt(" + (gosterilecekverisayisi - 1) + ")").hide(); //otomatik olarak 1. sayfada ilk 12 veriyi gösteriyoruz
+
+        $("#sayfalama").append('<li class="page-item"><a class="page-link" href="#">Geri</a></li>'); // back tuşunu ilk başa ekliyoruz
+
+        if (sayfasayisi > 10) { // sayfa sayısı 10 dan büyükse  ilk 3, ortadan 3 ve sondan 3 sayfayı ekliyoruz.
+
+            for (var i = 1; i <= 3; i++) { // sayfa başına ilk 3 sayfayı ekliyoruz
+                $("#sayfalama").append('<li class="page-item"><a class="page-link shadow-none ' + i + '" href="#">' + i + '</a></li>');
+            }
+
+            $("#sayfalama").append('&nbsp;...&nbsp;');
+
+            for (var i = sayfasayisiortasi - 1; i <= sayfasayisiortasi + 1; i++) { // sayfa ortasından 3 sayfa ekle
+                $("#sayfalama").append('<li class="page-item"><a class="page-link shadow-none ' + i + '" href="#">' + i + '</a></li>');
+            }
+
+            $("#sayfalama").append('&nbsp;...&nbsp;');
+
+            for (var i = sayfasayisi - 2; i <= sayfasayisi; i++) { //son 3 sayfayı eklme
+                $("#sayfalama").append('<li class="page-item"><a class="page-link shadow-none ' + i + '" href="#">' + i + '</a></li>');
+
+            }
+
+        } else {//sayfa sayısı 10 dan küçük veya eşitse tüm sayfaları yazdırıyoruz
+            for (var i = 1; i <= sayfasayisi; i++) { // sayfa başına ilk 3 sayfayı ekliyoruz
+                $("#sayfalama").append('<li class="page-item"><a class="page-link shadow-none ' + i + '" href="#">' + i + '</a></li>');
+            }
+        }
+
+        $("#sayfalama").append('<li class="page-item"><a class="page-link" href="#">İleri</a></li>'); //next tuşunu en sona ekliyoruz
+
+        $("#sayfalama li a.1").addClass("aktif"); //ilk değeri aktif yapıyoruz
+
+        $("#sayfadegeri").html("1");
+
+        //-----------------------------------BURADA SAYFAYA TIKLANMA İŞLEMİ YAPILIYIOR----------------------------------------------------
+
+        $("#sayfalama li a").click(function () { // sayfalara tıklandığında gerçkeleşen olaylar buradadır
+
+            var indis = $(this).html(); // tıklanan sayfanın kaçıncı sayfa olduğunu buluyoruz.
+            var gidilecek_indis;
+
+            if (indis == "İleri") { // ileriye tıklandıysa bir sonraki sayfanın indexini buluyoruz
+
+                if (parseInt($("#sayfadegeri").html()) < sayfasayisi) {
+
+                    gidilecek_indis = parseInt($("#sayfadegeri").html()) + 1;
+
+                } else {
+
+                    gidilecek_indis = parseInt($("#sayfadegeri").html());
+                }
+
+            } else if (indis == "Geri") {// geriye tıklandıysa bir önceki sayfanın indexini buluyoruz
+
+                if (parseInt($("#sayfadegeri").html()) > 1) { //sayfa değeri 1 den büyükse 1 eksiltiyoruz
+
+                    gidilecek_indis = parseInt($("#sayfadegeri").html()) - 1;
+
+                } else { // sayfa değeri 1 ise daha küçük sayfa olamayacağı için 1 de bırakıyoruz
+
+                    gidilecek_indis = parseInt($("#sayfadegeri").html());
+                }
+
+            } else { // direk sayı olarak sayfaya tıklandıysa tıklanılan sayfanın indexi ni buluyoruz
+
+                gidilecek_indis = indis;
+
+            }
+
+            $("#sayfalama li a." + parseInt($("#sayfadegeri").html()) + "").removeClass("aktif"); // aktif olan verinin aktif class ını siliyoruz
+            $("#sayfalama li a." + gidilecek_indis + "").addClass("aktif");// tıklanan veya gidilecek olan veriyi aktif ediyoruz
+
+
+            $("#sayfadegeri").html(gidilecek_indis); //sayfanın değerini yazdırıyoruz
+            var gt = gosterilecekverisayisi * parseInt(gidilecek_indis); // kaçıncı değerden başlanılacak onu buluyoruz
+            $("#tamirci_liste li").hide(); // sayfadaki tüm verileri temizliyoruz
+
+            for (var i = gt - gosterilecekverisayisi; i < gt; i++) {
+                $("#tamirci_liste li:eq(" + i + ")").show(); // gösterilmesi gereken verileri sayfada gösteriyoruz
+            }
+        });
+    });
+
+</script>
+<div style="text-align:center; margin:0 15px 0 15px;">
+    <table class="table table-light">
+        <tr>
+            <td style="width:40%;">
+                <select name="filtre_sehir" id="filtre_sehir" class="form-control">
+                    <option value="" class="kaydirma_cubugu">Şehir Seçiniz</option>
+                </select>
+            </td>
+            <td style="width:40%;">
+                <select name="filtre_kategori" id="filtre_kategori" class="form-control">
+                    <option value="" class="kaydirma_cubugu">Kategori Seçiniz</option>
+                </select>
+            </td>
+            <td style="width:20%;">
+                <a class="btn btn-outline-primary" id="btn_filtre">Fitrele</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="height:auto; width:auto; margin:15px;">
+    <div class="container-fluid" style="height:auto;">
+        <div class="row justify-content-center " id="row_tamirciler">
+            <div class="col-12 col-md-10 col-lg-8">
+                <ul class="list-unstyled" id="tamirci_liste">
+                    @for (int i = 0; i < 100; i++)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <li class="media mt-2 border-bottom" id="@item._id" onclick="profilegit(this.id)">
+                                @*<span>@i</span>*@
+                                <img src="data:image/png;base64,@item.resimler" class="mr-3" style="object-fit:scale-down; height:125px;width:125px;">
+                                <div class="media-body align-self-center w-auto" style="text-align:left;">
+                                    <h5 class="mt-0 mb-1">@item.isyeriadi</h5>
+                                    <p class="satirsayisi w-auto">
+                                        @item.aciklama asdlf asç. dfşlas falks şlkas las klasfklsafkl asöçmmzxmöç zxcmöçşmöfng asöd fşlksdf lşksfş lasd
+                                        aaaaaaaaaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        bbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbb
+                                    </p>
+                                    <small class="text-danger">
+                                        @foreach (var item1 in item.kategori)
+                                        {
+                                            <span>#@item1</span>
+                                        }
+                                    </small>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="col-12 col-md-10 col-lg-8 text-info">
+                <h6>Sayfa-<span id="sayfadegeri"></span></h6>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            @*sayfalama sayılarının gösterileceği satır*@
+            <div class="col-10 justify-content-center">
+                <nav aria-label="Page navigation example" class="justify-content-center">
+                    @*burada sayfalama numaralarını gösteriyoruz*@
+                    <ul class="pagination justify-content-center" id="sayfalama"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    @*<div class="container-fluid" style=" height:100%;">
+            <div class="row mr-2 ml-2 mr-lg-5 ml-lg-5 mr-md-4 ml-md-4 " style=" height:50%;">
+                @foreach (var item in Model)
+                {
+                    @item.kategori
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <div style="height:95%; width:90%; box-shadow:  0 1px 5px 0.5px lightgreen; padding:5px;">
+
+                            <div style=" height:50%;">
+
+                                <img src="data:image/png;base64,@item.resimler" style="object-fit:scale-down; height:100%;width:100%;" />
+                            </div>
+                            <div style="height:30%;">
+                                <p class="aciklama" style="font-size:calc(16px + 0.2vw); font-weight:600; text-align:center;"> @item.isyeriadi</p>
+
+                            </div>
+
+                            <div style="height:20%;">
+                                <a href="/Tamirci/Tamirci_Profili?tamirciID=@item._id" class="btn btn-success" style="margin-top:auto; font-size:small;">DETAYLAR</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>*@
+</div>
+
+<script src="~/tamirci.js"></script>
+<script src="~/sehir_kategori.js"></script>
+@* burası resimgönderme çalışıyor.*@
+
+<script>
+
+    $(document).ready(function () {
+        for (var i = 0; i < sehirler.length; i++) {
+            $("#filtre_sehir").append('<option value="' + sehirler[i] + '">' + sehirler[i] + '</option>');
+        }
+        // $("#filtre_sehir").change(function () { alert($("#filtre_sehir").val()); });
+
+        for (var i = 0; i < kategori.length; i++) {
+            $("#filtre_kategori").append('<option value="' + kategori[i] + '">' + kategori[i] + '</option>');
+        }
+
+        $("#btn_filtre").click(function () {
+            var sehir = $("#filtre_sehir").val();
+            var kategori = $("#filtre_kategori").val();
+            window.location = "/Tamirci/Tamirciler?sehir=" + sehir + "&&kategori=" + kategori + "";
+        });
+    });
+    function profilegit(id) {
+        window.location = "/Tamirci/Tamirci_Profili?tamirciID=" + id;
+    }
+</script>
+
+

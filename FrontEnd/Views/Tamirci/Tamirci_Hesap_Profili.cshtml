@@ -1,0 +1,218 @@
+﻿@model Tamirci_Bul.Models.Tamircimodel
+
+@{ ViewData["Title"] = "Tamirci_Hesap_Profili";
+    Layout = "~/Views/Shared/_LayoutUstMenu.cshtml"; }
+
+<link href="~/Style.css" rel="stylesheet" />
+<link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script src="~/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="~/jquery/jquery.js"></script>
+<nav class="justify-content-center" style="margin-top:10px;">
+    <div class="nav justify-content-center" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active border-bottom border-top" style="color:darkgreen; font-weight:500;" id="nav-hesap_bilgileri-tab" data-toggle="tab" href="#nav-hesap_bilgileri" role="tab" aria-controls="nav-hesap_bilgileri" aria-selected="true">Profil</a>
+        @*<a class="nav-item nav-link border-bottom border-top" style="color:darkgreen; font-weight:500;" id="nav-mesajlar-tab" data-toggle="tab" href="#nav-mesajlar" role="tab" aria-controls="nav-mesajlar" aria-selected="false">Mesajlar</a>*@
+        <a class="nav-item nav-link border-bottom border-top" style="color:darkgreen; font-weight:500;" id="nav-HesapAyarları-tab" data-toggle="tab" href="#nav-HesapAyarları" role="tab" aria-controls="nav-HesapAyarları" aria-selected="false">Firma Bilgileri</a>
+        <a class="nav-item nav-link border-bottom border-top" style="color:darkgreen; font-weight:500;" id="nav-resimayarları-tab" data-toggle="tab" href="#nav-resimayarları" role="tab" aria-controls="nav-resimayarları" aria-selected="false">Resimler</a>
+    </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent" style="margin-bottom:5%;">
+    <div class="tab-pane fade show active my-3 my-lg-2" id="nav-hesap_bilgileri" role="tabpanel" aria-labelledby="nav-hesap_bilgileri-tab">
+        <div class="col-12 col-sm-11 col-md-9 col-lg-8" style="margin:auto; box-shadow:0 0 3px 0 lightgray;">
+            <table style="margin:auto;" cellpadding="5">
+                <tr>
+                    <th style="text-align:right;">Ad : </th>
+                    <td style="text-align:left;"> @Model.isim</td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Soyad : </th>
+                    <td style="text-align:left;"> @Model.soyisim</td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">E-Mail : </th>
+                    <td style="text-align:left;"> @Model.email</td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Yeni Şifre :</th>
+                    <td style="text-align:left;"><input type="password" b id="t_txt_yeni_sifre" class="form-control" value="@Model.sifre" placeholder="Yeni Şifre" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Yeni Şifre Tekrar :</th>
+                    <td style="text-align:left;"><input type="password" id="t_txt_yeni_sifre_tekrar" class="form-control" value="@Model.sifre" placeholder="Yeni Şifre Tekrar" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;"></th>
+                    <td style="text-align:left; text-align:center;"><button type="button" id="tamircisifreguncelle" class="btn btn-outline-info">Şifreyi Değiştir</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-HesapAyarları" role="tabpanel" aria-labelledby="nav-HesapAyarları-tab">
+
+        <div class="col-12 col-sm-11 col-md-9 col-lg-8" style="margin:auto; box-shadow:0 0 3px 0 lightgray;">
+            <table style="margin:auto;" cellpadding="5">
+                <tr>
+                    <th style="text-align:right;">İş Yeri Sahibinin Adı :</th>
+                    <td style="text-align:left;"><input class="form-control" type="text" id="tamirci_isim" placeholder="İş Yeri Sahibinin Adı" value="@Model.isim" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">İş Yeri Sahibinin Soyadı :</th>
+                    <td style="text-align:left;"><input class="form-control" type="text" id="tamirci_soyisim" placeholder="İş Yeri Sahibinin Soyadı" value="@Model.soyisim" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">İş Yerinin Adı :</th>
+                    <td style="text-align:left;"><input class="form-control" type="text" id="tamirci_isyeriadi" placeholder="İş Yerinin Adı" value="@Model.isyeriadi" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">E-Mail :</th>
+                    <td style="text-align:left;"><input class="form-control" type="text" id="tamirci_email" placeholder="Mail Adresi" value="@Model.email" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Açıklama :</th>
+                    <td style="text-align:left;"><input class="form-control" type="text" id="tamirci_aciklama" placeholder="Açıklama" value="@Model.aciklama" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Kategoriler :</th>
+                    <td>
+                        <select name="t_kategori" id="t_kategori" class="form-control">
+                            <option value="">Kategori Ekle</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div style="width:auto; height:auto; border:1px solid lightgray;">
+                            <ul id="ul_kategoriliste" class="overflow-auto kaydirma_cubugu" style="height:auto; max-height:100px; list-style-type:none; padding-left:0; ">
+                                @if (Model.kategori.Count() > 0)
+                                {
+                                    foreach (var item in Model.kategori)
+                                    {
+                    <li id="t_@item" class="border-bottom w-100">
+                        <span id="@item" onclick="$('#t_' + this.id + '').remove(), kategorisil()" class="btn bi-x shadow-none justify-content-start text-danger spanhover"></span>@item
+                    </li>}
+                                }
+
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Çalışma Saatleri :</th>
+                    <td style="text-align:left;"><input class="form-control" type="text" id="tamirci_saatler" placeholder="Çalışma Saatleri" value="@Model.calismasaatleri" /></td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Adres:</th>
+                    <td style="text-align:left;">
+                        <textarea class="form-control kaydirma_cubugu" id="tamirci_adres" placeholder="Adres">@Model.adres</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;">Şehir:</th>
+                    <td style="text-align:left;">
+                        <select name="tprofil_sehir" id="tprofil_sehir" class="form-control">
+                            <option value="@Model.sehir" selected="selected">@Model.sehir</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align:right;"></th>
+                    <td style="text-align:left; text-align:center;"><button type="button" id="tamircibilgileriguncelle" class="btn btn-outline-info">Bilgileri Güncelle</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-resimayarları" role="tabpanel" aria-labelledby="nav-resimayarları-tab">
+        <div class="container-fluid justify-content-center">
+            <div class="row justify-content-center">
+                @* BURADA DOSYA EKLEME İŞLEMLERİ YAPILMAKTA *@
+                <div class="col-12 col-sm-11 col-md-9 col-lg-8 mt-4 justify-content-center" style="height: auto; width: 100%; margin: auto;">
+                    <div>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            <div class="" style="">
+                                <input type="checkbox" style="width:20px; height:20px; vertical-align:middle;" id="seciliresim" title="Ana Menüde Görünecek Resim Olarak Ayarla..." />
+                                <input type="file" id="image" name="imagee" value="" style="vertical-align:middle;" required />
+                                <button type="button" class="btn btn-outline-success shadow-none" style="font-size:small;" id="btn_resim_ekle" onclick="resim_ekle()">Kaydet</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                @* BURASI KÜÇÜK RESİMLERİN GÖRÜNECEĞİ ALAN*@
+                <div class="col-12 col-sm-11 col-md-9 col-lg-8 justify-content-center border-bottom border-top bordered shadow-sm" id="div_col" style="height:auto; margin:auto; padding:0.5% 0 0.5% 0;"></div>
+            </div>
+            <div class="row justify-content-center">
+                @* BURASI RESİM SİL VE SEÇ BUTONLARININ OLDUĞU ALAN *@
+                <div class="col-11 col-sm-11 col-md-10 col-lg-9 justify-content-center" id="divresimayar" style="height:auto;padding-top:1%;  margin:auto;"></div>
+
+            </div>
+            <div class="row justify-content-center">
+                @* BURASI BÜYÜK RESİMİN EKLENDİĞİ ALAN *@
+                <div class="col-10 col-sm-10 col-md-8 col-lg-6 justify-content-center" id="div_anaresim" style="height:auto; margin:auto; margin-top:2%;"></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/tamirci.js"></script>
+<script src="~/sehir_kategori.js"></script>
+<script>
+    kategorisil();
+    function kategorisil() { // tamircinin herhangi bir kategorisi yoksa  kategori yok olarak yazdırıyoruz
+        if ($("#ul_kategoriliste li").length == 0) {
+            document.getElementById("ul_kategoriliste").innerHTML = "Kategori Yok !";
+        }
+    }
+
+    $(document).ready(function () {
+        for (var i = 0; i < kategori.length; i++) { // burada kategori dropdownlarını dolduruyoruz.
+            $("#t_kategori").append('<option value="' + kategori[i] + '">' + kategori[i] + '</option>');
+        }
+        for (var i = 0; i < sehirler.length; i++) { // burada şehir dropdownlarını dolduruyoruz.
+            $("#tprofil_sehir").append('<option value="' + sehirler[i] + '">' + sehirler[i] + '</option>');
+        }
+
+        $("#t_kategori").change(function () { // burada tamirci kategori eklediğinde veya sildiğine ekleme çıkarma işlemlerini yaptırıyoruz
+            var deger = $("#t_kategori").val(); //seçilen kategoriyi aldık
+            var sayac = 0;
+            for (var i = 0; i < $("#ul_kategoriliste li").children("span").length; i++) {
+                if (deger.toString() == $("#ul_kategoriliste li").children("span")[i].id.toString()) { // seçilen kategori daha önce ekli mi kontrol ediyoruz
+                    sayac++;
+                }
+                // console.log($("#ul_kategoriliste li").children("span")[i].id);
+            }
+            if (sayac == 0) { // seçilen kategori daha önce ekli değil ise ekliyoruz
+                if (deger.toString() != "") {
+                    if ($("#ul_kategoriliste li").length == 0) {
+                        document.getElementById("ul_kategoriliste").innerHTML = "";
+                    }
+                    const li = document.createElement("li");
+                    li.id = "t_" + deger;
+                    const span = document.createElement("span");
+                    span.id = deger;
+                    span.className = "btn bi-x shadow-none justify-content-start";
+                    document.getElementById("ul_kategoriliste").append(li);
+                    li.append(span);
+                    li.innerHTML += deger;
+
+                    $("#" + span.id + "").click(function () { // burada kategoriyi sildiğimizde listeden çıkartıyoruz ve siliyoruz
+                        $("#t_" + span.id + "").remove();
+                        kategorisil()
+                    });
+                }
+            } else {
+                alert("Bu Kategori Zaten Ekli");
+            }
+
+        });
+
+        $("#nav-resimayarları-tab").click(function () { resimgetir() }); // resimler sayfasına girildiğinde tamirci.js dosyasındaki resimgetir fonksiyonu çağırılıyor
+        $("#tamircisifreguncelle").click(function () { tamircisifresiniguncelle() });  // tamirci şifresi güncellendiğinde tamirci.js dosyasındaki ilgili fonksiyona yolluyoruz
+        $("#tamircibilgileriguncelle").click(function () { tamircibilgileriguncelle() }); // burada tamirci biligilerini güncellediğinde tamirci.js dosyasında ki ilgili fonksiyona yolluyoruz
+    });
+</script>
+

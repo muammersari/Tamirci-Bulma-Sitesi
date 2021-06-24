@@ -1,0 +1,81 @@
+﻿.carousel-item {
+    height: 100vh;
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.kaydirma_cubugu::-webkit-scrollbar {
+    width: 10px; /*genislik 10px olsun*/
+    background-color: #eaeaea; /*scrollbar arkaplan renk*/
+    border-left: 1px solid #f1f1f1; /*arkaplan sol tarafa cizgi cek*/
+    border-radius: 15px;
+}
+
+.kaydirma_cubugu::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0; /*scrollbar renk*/
+    border-radius: 15px /*oval olsun*/
+}
+
+    .kaydirma_cubugu::-webkit-scrollbar-thumb:hover { /*tiklandiginda*/
+        background-color: #7d7d7d;
+    }
+
+.aciklama {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /*Kaç Stırda sınırlamak istiyorsanız */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ustbosluk {
+    margin-top: 10px;
+}
+
+/*.resim:hover {*/ /*resimin üstüne gelince resmi büyütüyor*/
+/*-webkit-filter: opacity(100%);*/
+/*filter: opacity(70%);*/
+/*-ms-transform: scaleY(1.05);*/ /* IE 9 */
+/*-webkit-transform: scaleY(1.05);*/ /* Safari 3-8 */
+/*transform: scale(1.05);
+}*/
+
+
+.satirsayisi {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.kucukresim {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+    .kucukresim:hover {
+        opacity: 1;
+        -ms-transform: scaleY(1.05); /* IE 9 */
+        -webkit-transform: scaleY(1.05); /* Safari 3-8 */
+        transform: scale(1.05);
+    }
+
+.secilikucukresim {
+    opacity: 1;
+    cursor: pointer;
+}
+
+    .secilikucukresim:hover {
+        -ms-transform: scaleY(1.05); /* IE 9 */
+        -webkit-transform: scaleY(1.05); /* Safari 3-8 */
+        transform: scale(1.05);
+    }
+
+
+
+    .spanhover:hover {
+        background-color: lightgreen;
+    }
